@@ -18,9 +18,9 @@ EOF
 #==============INIT=================
 #===================================
 checkenvvariables(){  
-    echo $REGION
-    echo $GCLOUD_CREDENTIALS
-    [[ -z $GCLOUD_CREDENTIALS ]] && { echo -e "\nEither credetials are required to run commands with the Google Cloud SDK"; exit 126; } || { echo "${GCLOUD_CREDENTIALS}" > credentials.json; PROJECT_ID=$( echo "$GCLOUD_CREDENTIALS" | jq '. .project_id' | cut -d "\"" -f2); }
+    [[ -z $GCLOUD_CREDENTIALS ]] && { echo -e "\nEither 'GCLOUD_CREDENTIALS' are required to run commands with the Google Cloud SDK"; exit 126; } || { echo "${GCLOUD_CREDENTIALS}" > credentials.json; PROJECT_ID=$( echo "$GCLOUD_CREDENTIALS" | jq '. .project_id' | cut -d "\"" -f2); }
+    echo ${PROJECT_ID}
+    cat credentials.json
 }
 #===================================
 showinit(){
@@ -51,7 +51,7 @@ rungcloudsdk(){
 #========DEPLOYCONTAINERAPP=========
 #===================================
 checkenvdeploy(){
-    [[ -z $REGION ]] && { echo -e "\nEither 'regions' are required to deploy app"; exit 126; }
+    [[ -z $REGION ]] && { echo -e "\nEither 'REGIONS' are required to deploy app"; exit 126; }
 }
 gcloudbuild(){
     gcloud builds submit /github/workspace --tag gcr.io/${PROJECT_ID}/${app}
@@ -82,9 +82,6 @@ while (( "$#" )); do
             exit 0
         ;;
         --deploy-container-app)
-            echo ${GCLOUD_CREDENTIALS}
-            echo ${REGION}
-            echo ${2}
             app=${2}
             init
             deploycontainerapp
