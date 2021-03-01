@@ -68,9 +68,13 @@ gcloudsuccess(){
 #===================================
 deploycontainerapp(){
     checkenvdeploy
+    echo "checkenvdeploy"
     gcloudbuild
+    echo "gcloudbuild"
     gclouddeploy
+    echo "gclouddeploy"
     gcloudsuccess
+    echo "gcloudsuccess"
 }
 #===================================
 #==========PARAMSANDARGS============
