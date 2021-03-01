@@ -19,8 +19,6 @@ EOF
 #===================================
 checkenvvariables(){  
     [[ -z $GCLOUD_CREDENTIALS ]] && { echo -e "\nEither 'GCLOUD_CREDENTIALS' are required to run commands with the Google Cloud SDK"; exit 126; } || { echo "${GCLOUD_CREDENTIALS}" > credentials.json; PROJECT_ID=$( echo "$GCLOUD_CREDENTIALS" | jq '. .project_id' | cut -d "\"" -f2); }
-    echo ${PROJECT_ID}
-    cat credentials.json
 }
 #===================================
 showinit(){
@@ -53,9 +51,11 @@ rungcloudsdk(){
 checkenvdeploy(){
     [[ -z $REGION ]] && { echo -e "\nEither 'REGIONS' are required to deploy app"; exit 126; }
 }
+#===================================
 gcloudbuild(){
     gcloud builds submit /github/workspace --tag gcr.io/${PROJECT_ID}/${app}
 }
+#===================================
 gclouddeploy(){
     gcloud run deploy ${app} --image gcr.io/${PROJECT_ID}/${app} --platform managed --region ${REGION} --allow-unauthenticated
 }
@@ -64,9 +64,9 @@ gcloudsuccess(){
     echo "Successful deploy!"
 }
 #===================================
-#===================================
-#===================================
 deploycontainerapp(){
+    init 
+    echo "init"
     checkenvdeploy
     echo "checkenvdeploy"
     gcloudbuild
@@ -87,8 +87,6 @@ while (( "$#" )); do
         ;;
         --deploy-container-app)
             app=${2}
-            init
-            echo "init"
             deploycontainerapp
             echo "deploycontainerapp"
             exit 0
