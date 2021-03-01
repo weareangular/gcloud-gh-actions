@@ -88,7 +88,9 @@ while (( "$#" )); do
         --deploy-container-app)
             app=${2}
             init
+            echo "init"
             deploycontainerapp
+            echo "deploycontainerapp"
             exit 0
         ;;
         *)
