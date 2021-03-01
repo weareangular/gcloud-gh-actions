@@ -80,6 +80,8 @@ while (( "$#" )); do
             exit 0
         ;;
         --deploy-container-app)
+            echo ${GOOGLE_APPLICATION_CREDENTIALS}
+            echo ${REGION}
             app=${2}
             init
             deploycontainerapp
