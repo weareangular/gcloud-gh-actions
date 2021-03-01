@@ -18,6 +18,9 @@ EOF
 #==============INIT=================
 #===================================
 checkenvvariables(){  
+    echo $GOOGLE_APPLICATION_CREDENTIALS
+    echo $REGION
+    echo $GCLOUD_CREDENTIALS
     [[ -z $GOOGLE_APPLICATION_CREDENTIALS ]] && { echo -e "\nEither credetials are required to run commands with the Google Cloud SDK"; exit 126; } || { echo "${GOOGLE_APPLICATION_CREDENTIALS}" > credentials.json; PROJECT_ID=$( echo "$GOOGLE_APPLICATION_CREDENTIALS" | jq '. .project_id' | cut -d "\"" -f2); }
 }
 #===================================
@@ -82,6 +85,7 @@ while (( "$#" )); do
         --deploy-container-app)
             echo ${GOOGLE_APPLICATION_CREDENTIALS}
             echo ${REGION}
+            echo ${2}
             app=${2}
             init
             deploycontainerapp
