@@ -23,9 +23,30 @@ This Action for [Gcloud](https://cloud.google.com/) enables arbitrary actions wi
 
 ## Environment variables
 
-- `GOOGLE_APPLICATION_CREDENTIALS` - **Required**. The token to use for authentication.
+- `GCLOUD_CREDENTIALS` - **Required**. The token to use for authentication.
 - `REGION` - Region to deploy the app (Only applicable if script run with `--deploy-container-app`).
 
 ## Example
 
-Coming soon...
+To authenticate with Gcloud sdk, and deploy container in Gcloud RUN:
+
+```yaml
+name: Build and deploy in Gcloud (Production)
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: weareangular/gcloud-gh-actions@dev
+        with:
+          args: --deploy-container-app ${{ secrets.APP_NAME }}
+        env:
+          GCLOUD_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          REGION: ${{ secrets.REGION }}
+```
