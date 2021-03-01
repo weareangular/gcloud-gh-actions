@@ -18,7 +18,7 @@ EOF
 #==============INIT=================
 #===================================
 checkenvvariables(){  
-    [[ -z $GCLOUD_CREDENTIALS ]] && { echo -e "\nEither credetials are required to run commands with the Google Cloud SDK"; exit 126; } || { echo "${GCLOUD_CREDENTIALS}" > credentials.json; PROJECT_ID=$( echo "$GCLOUD_CREDENTIALS" | jq '. .project_id' | cut -d "\"" -f2); }
+    [[ -z $GOOGLE_APPLICATION_CREDENTIALS ]] && { echo -e "\nEither credetials are required to run commands with the Google Cloud SDK"; exit 126; } || { echo "${GOOGLE_APPLICATION_CREDENTIALS}" > credentials.json; PROJECT_ID=$( echo "$GOOGLE_APPLICATION_CREDENTIALS" | jq '. .project_id' | cut -d "\"" -f2); }
 }
 #===================================
 showinit(){
