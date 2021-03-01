@@ -49,21 +49,15 @@ rungcloudsdk(){
 #========DEPLOYCONTAINERAPP=========
 #===================================
 checkenvdeploy(){
-    echo "check before"
     [[ -z $REGION ]] && { echo -e "\nEither 'REGIONS' are required to deploy app"; exit 126; }
-    echo "check after"
 }
 #===================================
 gcloudbuild(){
-    echo "build before"
     gcloud builds submit /github/workspace --tag gcr.io/${PROJECT_ID}/${app}
-    echo "build after"
 }
 #===================================
 gclouddeploy(){
-    echo "build before"
     gcloud run deploy ${app} --image gcr.io/${PROJECT_ID}/${app} --platform managed --region ${REGION} --allow-unauthenticated
-    echo "build after"
 }
 #===================================
 gcloudsuccess(){
@@ -71,15 +65,10 @@ gcloudsuccess(){
 }
 #===================================
 deploycontainerapp(){
-    echo "init"
     init 
-    echo "checkenvdeploy"
     checkenvdeploy
-    echo "gcloudbuild"
     gcloudbuild
-    echo "gclouddeploy"
     gclouddeploy
-    echo "gcloudsuccess"
     gcloudsuccess
 }
 #===================================
@@ -93,7 +82,6 @@ while (( "$#" )); do
         ;;
         --deploy-container-app)
             app=${2}
-            echo "deploycontainerapp"
             deploycontainerapp
             exit 0
         ;;
