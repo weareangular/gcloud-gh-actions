@@ -52,7 +52,7 @@ checkenvdeploy(){
     [[ -z $REGION ]] && { echo -e "\nEither 'regions' are required to deploy app"; exit 126; }
 }
 gcloudbuild(){
-    gcloud builds submit /app --tag gcr.io/${PROJECT_ID}/${app}
+    gcloud builds submit /github/workspace --tag gcr.io/${PROJECT_ID}/${app}
 }
 gclouddeploy(){
     gcloud run deploy ${app} --image gcr.io/${PROJECT_ID}/${app} --platform managed --region ${REGION} --allow-unauthenticated
