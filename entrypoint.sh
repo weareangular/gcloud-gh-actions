@@ -49,15 +49,21 @@ rungcloudsdk(){
 #========DEPLOYCONTAINERAPP=========
 #===================================
 checkenvdeploy(){
+    echo ""
     [[ -z $REGION ]] && { echo -e "\nEither 'REGIONS' are required to deploy app"; exit 126; }
+    echo ""
 }
 #===================================
 gcloudbuild(){
+    echo ""
     gcloud builds submit /github/workspace --tag gcr.io/${PROJECT_ID}/${app}
+    echo ""
 }
 #===================================
 gclouddeploy(){
+    echo ""
     gcloud run deploy ${app} --image gcr.io/${PROJECT_ID}/${app} --platform managed --region ${REGION} --allow-unauthenticated
+    echo ""
 }
 #===================================
 gcloudsuccess(){
