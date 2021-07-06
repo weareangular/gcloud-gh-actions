@@ -100,7 +100,7 @@ projectmicrocomponentbuild(){
 }
 #===================================
 uploadmicrocomponent(){
-    gsutil -h "Content-Type:text/javascript" cp $outputdir $(echo $BUCKET_URL | jq -r ".")
+    gsutil -h "Content-Type:text/javascript" cp $outputdir $BUCKET_URL
 }
 #===================================
 deploymicrocomponent(){

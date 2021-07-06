@@ -8,6 +8,7 @@ dependencies(){
 getAPI(){
     [[ -n $(grep TOKEN .env | cut -d '=' -f 2-) ]] && { API_KEY=$(grep TOKEN .env); API_KEY="${API_KEY#*=}"; } || { echo -e "\nEither env file is required to run test the gcloud cli"; exit 162; }
     [[ -n $(grep BUCKET_URL .env | cut -d '=' -f 2-) ]] && { BUCKET_URL=$(grep BUCKET_URL .env | cut -d '=' -f2); }
+    [[ -n $(grep REGION .env | cut -d '=' -f 2-) ]] && { REGION=$(grep REGION .env | cut -d '=' -f2); }
 }
 #===================================
 deleteimageifexist(){
