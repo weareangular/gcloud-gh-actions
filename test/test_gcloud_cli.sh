@@ -6,7 +6,8 @@ dependencies(){
 }
 #===================================
 getAPI(){
-    [[ -f ".env" ]] && { API_KEY=$(cat .env); } || { echo -e "\nEither env file is required to run test the gcloud cli"; exit 162; }
+    [[ -n $(grep TOKEN .env | cut -d '=' -f 2-) ]] && { API_KEY=$(grep TOKEN .env); API_KEY="${API_KEY#*=}"; } || { echo -e "\nEither env file is required to run test the gcloud cli"; exit 162; }
+    [[ -n $(grep BUCKET_URL .env | cut -d '=' -f 2-) ]] && { BUCKET_URL=$(grep BUCKET_URL .env | cut -d '=' -f2); }
 }
 #===================================
 deleteimageifexist(){
@@ -21,7 +22,8 @@ rundockerbash(){
     tput setaf 6
     echo -e "\nTESTING GOOGLE CLOUD SDK WITH 'info' COMMAND"
     tput sgr0
-    docker run -it -e "GOOGLE_APPLICATION_CREDENTIALS=${API_KEY}" --rm wrap-gcloud:1.0 info
+    docker run -it --entrypoint /bin/bash -v "/home/gio/Work/aurora-mc-api":"/github/workspace" -e "GCLOUD_CREDENTIALS=${API_KEY}" -e "BUCKET_URL=${BUCKET_URL}" --rm wrap-gcloud:1.0
+    #docker run -it -e "GCLOUD_CREDENTIALS=${API_KEY}" -e "BUCKET_URL=${BUCKET_URL}" --rm wrap-gcloud:1.0 info
 }
 #===================================
 run(){

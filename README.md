@@ -19,19 +19,22 @@ This Action for [Gcloud](https://cloud.google.com/) enables arbitrary actions wi
 
 - `--deploy-container-app [APP_NAME]` - deploy container app gcloud run.
   - `[APP_NAME]` - is the name of the app where it should be deployed.
+- `--deploy-micro-component [MICROCOMPONENT_NAME]` - deploy microcomponent on gcloud storage.
+  - `[MICROCOMPONENT_NAME]` - is the name of the microcomponent to be stored.
 - `args` - **Required**. This is the arguments you want to use for the `gcloud` sdk.
 
 ## Environment variables
 
 - `GCLOUD_CREDENTIALS` - **Required**. The token to use for authentication.
 - `REGION` - Region to deploy the app (Only applicable if script run with `--deploy-container-app`).
+- `BUCKET_URL` - Bucket url to store micro component (Only applicable if script run with `--deploy-micro-component`).
 
 ## Example
 
 To authenticate with Gcloud sdk, and deploy container in Gcloud RUN:
 
 ```yaml
-name: Build and deploy in Gcloud (Production)
+name: Build and deploy container app in Gcloud (Production)
 on:
   push:
     branches:
@@ -49,4 +52,27 @@ jobs:
         env:
           GCLOUD_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           REGION: ${{ secrets.REGION }}
+```
+
+To authenticate with Gcloud sdk, and deploy microcomponent in Gcloud STORAGE:
+
+```yaml
+name: Build and deploy microcomponent in Gcloud (Production)
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: weareangular/gcloud-gh-actions@dev
+        with:
+          args: --deploy-micro-component ${{ secrets.MICROCOMPONENT_NAME }}
+        env:
+          GCLOUD_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          BUCKET_URL: ${{ secrets.BUCKET_URL }}
 ```

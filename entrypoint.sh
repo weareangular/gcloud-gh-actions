@@ -9,9 +9,11 @@ help() {
   cat << EOF
 usage: $0 [OPTIONS]
     --h                                 Show this message 
-    --deploy-container-app [APP_NAME]   deploy container app on GCloud RUN
+    --deploy-container-app   [APP_NAME]   deploy container app on GCloud RUN
                                             [APP_NAME] => app name *required
-    [ARGS...]                           arguments you want to use for the heroku cli
+    --deploy-micro-component [MICROCOMPONENT_NAME]   deploy microcomponent on GCloud STORE
+                                            [MICROCOMPONENT_NAME] => microcomponent name *required
+    [ARGS...]                             arguments you want to use for the heroku cli
 EOF
 }
 #===================================
@@ -80,6 +82,36 @@ deploycontainerapp(){
 #===================================
 #==========PARAMSANDARGS============
 #===================================
+checkmicrocomponentnamedeploy(){
+    echo ""
+    proyectdir='/github/workspace'
+    [[ -z $microcomponentname ]] && { echo -e "\nEither 'microComponentName' are required to deploy app"; exit 126; }
+    [[ -z $BUCKET_URL ]] && { echo -e "\nEither 'BUCKET_URL' are required to deploy app"; exit 126; }
+    echo ""
+}
+#===================================
+projectmicrocomponentbuild(){
+    cd $proyectdir
+    inputdir="$(cat tsconfig.json | jq -r '.compilerOptions.outDir')/index.js"
+    outputdir="$(cat tsconfig.json | jq -r '.compilerOptions.outDir')/${microcomponentname}.js"
+    npm i 
+    npm run build 
+    mv $inputdir $outputdir
+}
+#===================================
+uploadmicrocomponent(){
+    gsutil -h "Content-Type:text/javascript" cp $outputdir $(echo $BUCKET_URL | jq -r ".")
+}
+#===================================
+deploymicrocomponent(){
+    init
+    checkmicrocomponentnamedeploy
+    projectmicrocomponentbuild
+    uploadmicrocomponent
+}
+#===================================
+#==========PARAMSANDARGS============
+#===================================
 while (( "$#" )); do
     case ${1} in
         --h)
@@ -89,6 +121,11 @@ while (( "$#" )); do
         --deploy-container-app)
             app=${2}
             deploycontainerapp
+            exit 0
+        ;;
+        --deploy-micro-component)
+            microcomponentname=${2}
+            deploymicrocomponent
             exit 0
         ;;
         *)
