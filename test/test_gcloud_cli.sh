@@ -22,8 +22,7 @@ rundockerbash(){
     tput setaf 6
     echo -e "\nTESTING GOOGLE CLOUD SDK WITH 'info' COMMAND"
     tput sgr0
-    docker run -it --entrypoint /bin/bash -v "/home/gio/Work/aurora-mc-api":"/github/workspace" -e "GCLOUD_CREDENTIALS=${API_KEY}" -e "BUCKET_URL=${BUCKET_URL}" --rm wrap-gcloud:1.0
-    #docker run -it -e "GCLOUD_CREDENTIALS=${API_KEY}" -e "BUCKET_URL=${BUCKET_URL}" --rm wrap-gcloud:1.0 info
+    docker run -it -e "GCLOUD_CREDENTIALS=${API_KEY}" -e "BUCKET_URL=${BUCKET_URL}" --rm wrap-gcloud:1.0 info
 }
 #===================================
 run(){
